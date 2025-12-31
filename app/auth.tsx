@@ -9,7 +9,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Alert
+  Alert,
+  SafeAreaView
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -102,6 +103,7 @@ export default function AuthScreen() {
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
     >
+      <SafeAreaView style={{ flex: 1, width: '100%' }}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1, justifyContent: 'center', width: '100%' }}
@@ -170,6 +172,7 @@ export default function AuthScreen() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+      </SafeAreaView>
     </LinearGradient>
   );
 }

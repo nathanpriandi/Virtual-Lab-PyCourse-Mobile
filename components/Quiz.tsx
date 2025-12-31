@@ -42,7 +42,7 @@ export default function Quiz({ quizData, onQuizComplete }: QuizProps) {
   const isAllAnswered = Object.keys(selectedAnswers).length === quizData.questions.length;
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>{quizData.title}</Text>
         <Text style={styles.subtitle}>
@@ -104,7 +104,7 @@ export default function Quiz({ quizData, onQuizComplete }: QuizProps) {
           </TouchableOpacity>
         )}
       </View>
-    </ScrollView>
+    </View>
   );
 }
 

@@ -53,21 +53,31 @@ export const modules = [
 
       <h3>Apa itu Variabel?</h3>
       <p>Variabel adalah wadah untuk menyimpan nilai data. Dalam Python, variabel dibuat saat Anda pertama kali memberinya nilai. Anda tidak perlu mendeklarasikan tipe variabel secara eksplisit.</p>
-      <pre><code># x adalah variabel bertipe int (integer)\nx = 5\n\n# nama adalah variabel bertipe str (string)\nnama = "Michael"\n\nprint(x)\nprint(nama)</code></pre>
+      <pre># x adalah variabel bertipe int (integer)\nx = 5\n\n# nama adalah variabel bertipe str (string)\nnama = "Michael"\n\nprint(x)\nprint(nama)</pre>
       
       <h3>Aturan Penamaan Variabel</h3>
       <p>Sebuah variabel harus dimulai dengan huruf atau karakter garis bawah (_). Variabel tidak bisa dimulai dengan angka dan hanya boleh berisi karakter alfanumerik dan garis bawah (A-z, 0-9, dan _). Ingat, nama variabel di Python bersifat <b>case-sensitive</b> (<code>usia</code> dan <code>USIA</code> adalah dua variabel yang berbeda).</p>
       
       <h3>Komentar (Comments)</h3>
       <p>Komentar digunakan untuk menjelaskan kode dan membuat kode lebih mudah dibaca. Komentar di Python dimulai dengan tanda <code>#</code>.</p>
-      <pre><code># Ini adalah komentar satu baris\nprint("Hello, World!")</code></pre>
+      <pre># Ini adalah komentar satu baris\nprint("Hello, World!")</pre>
     `
   },
   {
     id: 'data-types',
     title: 'Data Types',
     imageUrl: dataTypesImage,
-    defaultCode: '# Selamat datang di modul Tipe Data!\n# Coba periksa tipe data variabel di bawah ini.\n\nx = 10\ny = "Hello"\nz = [1, 2, 3]\n\nprint(type(x))\nprint(type(y))\nprint(type(z))\n',
+    defaultCode: `# Selamat datang di modul Tipe Data!
+# Coba periksa tipe data variabel di bawah ini.
+
+x = 10
+y = "Hello"
+z = [1, 2, 3]
+
+print(type(x))
+print(type(y))
+print(type(z))
+`,
     quiz: {
       title: 'Data Types Quiz',
       questions: [
@@ -96,14 +106,22 @@ export const modules = [
       
       <h3>Mendapatkan Tipe Data</h3>
       <p>Anda bisa mendapatkan tipe data dari variabel apa pun dengan menggunakan fungsi <code>type()</code>.</p>
-      <pre><code>x = 5\nprint(type(x))  # Output: &lt;class 'int'&gt;\n\ny = "Hello"\nprint(type(y))  # Output: &lt;class 'str'&gt;\n\nz = 1.5\nprint(type(z))  # Output: &lt;class 'float'&gt;</code></pre>
+      <pre>x = 5\nprint(type(x))  # Output: &lt;class 'int'&gt;\n\ny = "Hello"\nprint(type(y))  # Output: &lt;class 'str'&gt;\n\nz = 1.5\nprint(type(z))  # Output: &lt;class 'float'&gt;</pre>
     `
   },
   {
     id: 'numbers',
     title: 'Numbers',
     imageUrl: numbersImage,
-    defaultCode: '# Selamat datang di modul Angka!\n# Coba operasikan angka-angka di bawah ini.\n\na = 10\nb = 3\n\nprint("a + b =", a + b)\nprint("a // b =", a // b)\n',
+    defaultCode: `# Selamat datang di modul Angka!
+# Coba operasikan angka-angka di bawah ini.
+
+a = 10
+b = 3
+
+print("a + b =", a + b)
+print("a // b =", a // b)
+`,
     quiz: {
       title: 'Numbers Quiz',
       questions: [
@@ -123,22 +141,36 @@ export const modules = [
       
       <h3>Integer (int)</h3>
       <p>Integer adalah bilangan bulat, positif atau negatif, tanpa desimal, dengan panjang tidak terbatas.</p>
-      <pre><code>x = 1\ny = 1234567890\nz = -32</code></pre>
+      <pre>x = 1
+y = 1234567890
+z = -32</pre>
 
       <h3>Float</h3>
       <p>Float, atau "floating point number", adalah angka, positif atau negatif, yang mengandung satu atau lebih desimal.</p>
-      <pre><code>x = 1.10\ny = 1.0\nz = -35.59</code></pre>
+      <pre>x = 1.10
+y = 1.0
+z = -35.59</pre>
 
       <h3>Complex</h3>
       <p>Bilangan kompleks ditulis dengan "j" sebagai bagian imajiner.</p>
-      <pre><code>x = 3 + 5j\ny = 5j\nz = -5j</code></pre>
+      <pre>x = 3 + 5j
+y = 5j
+z = -5j</pre>
     `
   },
   {
     id: 'casting',
     title: 'Casting',
     imageUrl: castingImage,
-    defaultCode: '# Selamat datang di modul Casting!\n# Coba ubah tipe data variabel.\n\nx = "123"\ny = int(x)\n\nprint(type(x))\nprint(type(y))\n',
+    defaultCode: `# Selamat datang di modul Casting!
+# Coba ubah tipe data variabel.
+
+x = "123"
+y = int(x)
+
+print(type(x))
+print(type(y))
+`,
     quiz: {
       title: 'Casting Quiz',
       questions: [
@@ -154,22 +186,41 @@ export const modules = [
     },
     materi: `
       <h3>Apa itu Casting?</h3>
-      <p>Terkadang, Anda mungkin perlu menentukan tipe data pada sebuah variabel. Ini dapat dilakukan dengan *casting*. Python adalah bahasa berorientasi objek, dan karenanya ia menggunakan fungsi konstruktor untuk melakukan casting:</p>
+      <p>Terkadang, Anda mungkin perlu menentukan tipe data pada sebuah variabel. Ini dapat dilakukan with *casting*. Python adalah bahasa berorientasi objek, and karenanya ia menggunakan fungsi konstruktor untuk melakukan casting:</p>
       <ul>
         <li><code>int()</code> - membuat bilangan bulat dari literal integer, float (dengan membulatkan ke bawah), atau string (jika string mewakili bilangan bulat).</li>
-        <li><code>float()</code> - membuat bilangan float dari literal integer, float, atau string (jika string mewakili float atau integer).</li>
-        <li><code>str()</code> - membuat string dari berbagai tipe data, termasuk integer, float, dan string.</li>
+        <li><code>float()</code> - membuat bilangan float dari literal integer, float, atau string (jika string mewakili float or integer).</li>
+        <li><code>str()</code> - membuat string dari berbagai tipe data, termasuk integer, float, and string.</li>
       </ul>
       
       <h3>Contoh Casting</h3>
-      <pre><code># Integer\nx = int(1)     # x akan menjadi 1\ny = int(2.8)   # y akan menjadi 2\nz = int("3")   # z akan menjadi 3\n\n# Float\na = float(1)     # a akan menjadi 1.0\nb = float(2.8)   # b akan menjadi 2.8\nc = float("3")   # c akan menjadi 3.0\n\n# String\ns = str("s1")    # s akan menjadi 's1'\nt = str(2)       # t akan menjadi '2'\nu = str(3.0)     # u akan menjadi '3.0'</code></pre>
+      <pre># Integer
+x = int(1)     # x akan menjadi 1
+y = int(2.8)   # y akan menjadi 2
+z = int("3")   # z akan menjadi 3
+
+# Float
+a = float(1)     # a akan menjadi 1.0
+b = float(2.8)   # b akan menjadi 2.8
+c = float("3")   # c akan menjadi 3.0
+
+# String
+s = str("s1")    # s akan menjadi 's1'
+t = str(2)       # t akan menjadi '2'
+u = str(3.0)     # u akan menjadi '3.0'</pre>
     `
   },
   {
     id: 'boolean',
     title: 'Boolean',
     imageUrl: booleanImage,
-    defaultCode: '# Selamat datang di modul Boolean!\n# Coba evaluasi ekspresi boolean.\n\nprint(10 > 9)\nprint(bool("Hello"))\nprint(bool(0))\n',
+    defaultCode: `# Selamat datang di modul Boolean!
+# Coba evaluasi ekspresi boolean.
+
+print(10 > 9)
+print(bool("Hello"))
+print(bool(0))
+`,
     quiz: {
       title: 'Boolean Quiz',
       questions: [
@@ -185,14 +236,16 @@ export const modules = [
     },
     materi: `
       <h3>Nilai Boolean</h3>
-      <p>Dalam pemrograman, Anda sering perlu tahu apakah suatu ekspresi itu <code>True</code> atau <code>False</code>. Anda dapat mengevaluasi ekspresi apa pun di Python, dan mendapatkan salah satu dari dua jawaban, <code>True</code> atau <code>False</code>.</p>
+      <p>Dalam pemrograman, Anda sering perlu tahu apakah suatu ekspresi itu <code>True</code> atau <code>False</code>. Anda dapat mengevaluasi ekspresi apa pun di Python, and mendapatkan salah satu dari dua jawaban, <code>True</code> atau <code>False</code>.</p>
       
       <h3>Mengevaluasi Nilai</h3>
-      <p>Saat Anda membandingkan dua nilai, ekspresi tersebut dievaluasi dan Python mengembalikan jawaban Boolean.</p>
-      <pre><code>print(10 > 9)   # Output: True\nprint(10 == 9)  # Output: False\nprint(10 < 9)   # Output: False</code></pre>
+      <p>Saat Anda membandingkan dua nilai, ekspresi tersebut dievaluasi and Python mengembalikan jawaban Boolean.</p>
+      <pre>print(10 > 9)   # Output: True
+print(10 == 9)  # Output: False
+print(10 < 9)   # Output: False</pre>
       
       <h3>Hampir Semua Nilai adalah True</h3>
-      <p>Hampir semua nilai dievaluasi sebagai <code>True</code> jika memiliki semacam konten. String apa pun adalah <code>True</code>, kecuali string kosong. Angka apa pun adalah <code>True</code>, kecuali 0. List, tuple, set, dan dictionary apa pun adalah <code>True</code>, kecuali yang kosong.</p>
+      <p>Hampir semua nilai dievaluasi sebagai <code>True</code> jika memiliki semacam konten. String apa pun adalah <code>True</code>, kecuali string kosong. Angka apa pun adalah <code>True</code>, kecuali 0. List, tuple, set, and dictionary apa pun adalah <code>True</code>, kecuali yang kosong.</p>
       
       <h3>Beberapa Nilai adalah False</h3>
       <p>Nilai-nilai berikut dievaluasi sebagai <code>False</code>: <code>False</code>, <code>None</code>, <code>0</code>, <code>""</code>, <code>()</code>, <code>[]</code>, <code>{}</code>.</p>
@@ -202,7 +255,16 @@ export const modules = [
     id: 'operator',
     title: 'Operator',
     imageUrl: operatorsImage,
-    defaultCode: '# Selamat datang di modul Operator!\n# Coba berbagai operasi matematika.\n\na = 15\nb = 4\n\nprint("a + b =", a + b)\nprint("a % b =", a % b)\nprint("a ** b =", a ** b)\n',
+    defaultCode: `# Selamat datang di modul Operator!
+# Coba berbagai operasi matematika.
+
+a = 15
+b = 4
+
+print("a + b =", a + b)
+print("a % b =", a % b)
+print("a ** b =", a ** b)
+`,
     quiz: {
       title: 'Operator Quiz',
       questions: [
@@ -218,7 +280,7 @@ export const modules = [
     },
     materi: `
       <h3>Operator Python</h3>
-      <p>Operator digunakan untuk melakukan operasi pada variabel dan nilai. Python membagi operator ke dalam beberapa grup:</p>
+      <p>Operator digunakan untuk melakukan operasi pada variabel and nilai. Python membagi operator ke dalam beberapa grup:</p>
       <ul>
         <li>Operator Aritmatika</li>
         <li>Operator Penugasan (Assignment)</li>
@@ -229,7 +291,7 @@ export const modules = [
       </ul>
 
       <h3>Operator Aritmatika</h3>
-      <p>Digunakan dengan nilai numerik untuk melakukan operasi matematika umum:</p>
+      <p>Digunakan with nilai numerik untuk melakukan operasi matematika umum:</p>
       <ul>
         <li><code>+</code> (Penjumlahan)</li>
         <li><code>-</code> (Pengurangan)</li>
@@ -239,7 +301,11 @@ export const modules = [
         <li><code>**</code> (Pangkat)</li>
         <li><code>//</code> (Floor division - pembulatan ke bawah)</li>
       </ul>
-      <pre><code>x = 10\ny = 3\nprint(x + y)  # Output: 13\nprint(x % y)  # Output: 1\nprint(x // y) # Output: 3</code></pre>
+      <pre>x = 10
+y = 3
+print(x + y)  # Output: 13
+print(x % y)  # Output: 1
+print(x // y) # Output: 3</pre>
 
       <h3>Operator Perbandingan</h3>
       <p>Digunakan untuk membandingkan dua nilai:</p>
@@ -257,7 +323,16 @@ export const modules = [
     id: 'if-else',
     title: 'Conditionals',
     imageUrl: conditionalsImage,
-    defaultCode: '# Selamat datang di modul Kondisional!\n# Coba buat keputusan dengan if-else.\n\numur = 18\n\nif umur >= 18:\n  print("Anda dewasa")\nelse:\n  print("Anda belum dewasa")\n',
+    defaultCode: `# Selamat datang di modul Kondisional!
+# Coba buat keputusan with if-else.
+
+umur = 18
+
+if umur >= 18:
+  print("Anda dewasa")
+else:
+  print("Anda belum dewasa")
+`,
     quiz: {
       title: 'Conditionals Quiz',
       questions: [
@@ -272,9 +347,17 @@ export const modules = [
       ]
     },
     materi: `
-      <h3>Kondisi Python dan Pernyataan If</h3>
-      <p>Kondisi ini dapat digunakan dalam pernyataan "if" dan "loop".</p>
-      <pre><code>a = 200\nb = 33\n\nif b > a:\n  print("b lebih besar dari a")\nelif a == b:\n  print("a dan b sama")\nelse:\n  print("a lebih besar dari b")</code></pre>
+      <h3>Kondisi Python and Pernyataan If</h3>
+      <p>Kondisi ini dapat digunakan dalam pernyataan "if" and "loop".</p>
+      <pre>a = 200
+b = 33
+
+if b > a:
+  print("b lebih besar dari a")
+elif a == b:
+  print("a dan b sama")
+else:
+  print("a lebih besar dari b")</pre>
       
       <h3>Penjelasan</h3>
       <ul>
@@ -288,16 +371,23 @@ export const modules = [
     id: 'while-loop',
     title: 'While Loop',
     imageUrl: whileLoopImage,
-    defaultCode: '# Selamat datang di modul While Loop!\n# Coba buat perulangan sederhana.\n\ni = 0\nwhile i < 3:\n  print("Iterasi ke-", i)\n  i += 1\n',
+    defaultCode: `# Selamat datang di modul While Loop!
+# Coba buat perulangan sederhana.
+
+i = 0
+while i < 3:
+  print("Iterasi ke-", i)
+  i += 1
+`,
     quiz: {
       title: 'While Loop Quiz',
       questions: [
         {
-          question: "Statement apa yang digunakan untuk menghentikan iterasi saat ini dan lanjut ke iterasi berikutnya?",
+          question: "Statement apa yang digunakan untuk menghentikan iterasi saat ini and lanjut ke iterasi berikutnya?",
           options: ["break", "stop", "next", "continue"],
         },
         {
-          question: "Apa yang akan terjadi jika Anda lupa menulis `i += 1` di dalam `while i < 5:`?",
+          question: "Apa yang akan terjadi jika Anda lupa menulis \`i += 1\` di dalam \`while i < 5:\`?",
           options: ["Error", "Loop berhenti setelah 1 iterasi", "Infinite loop (perulangan tak terbatas)", "Tidak terjadi apa-apa"],
         }
       ]
@@ -305,32 +395,54 @@ export const modules = [
     materi: `
       <h3>Python While Loop</h3>
       <p>Dengan *while loop*, kita dapat mengeksekusi satu set pernyataan selama kondisi bernilai benar (True).</p>
-      <pre><code># Cetak i selama i kurang dari 6\ni = 1\nwhile i < 6:\n  print(i)\n  i += 1  # Penting! Jangan lupa menaikkan i</code></pre>
+      <pre># Cetak i selama i kurang dari 6
+i = 1
+while i < 6:
+  print(i)
+  i += 1  # Penting! Jangan lupa menaikkan i</pre>
       <p><b>Penting:</b> Ingatlah untuk menambah nilai variabel i, jika tidak, *loop* akan berlanjut selamanya (infinite loop).</p>
 
       <h3>Kata Kunci <code>break</code></h3>
       <p>Dengan pernyataan <code>break</code>, kita dapat menghentikan *loop* bahkan jika kondisi *while* masih benar.</p>
-      <pre><code># Keluar dari loop saat i adalah 3\ni = 1\nwhile i < 6:\n  print(i)\n  if i == 3:\n    break\n  i += 1</code></pre>
+      <pre># Keluar dari loop saat i adalah 3
+i = 1
+while i < 6:
+  print(i)
+  if i == 3:
+    break
+  i += 1</pre>
 
       <h3>Kata Kunci <code>continue</code></h3>
-      <p>Dengan pernyataan <code>continue</code>, kita dapat menghentikan iterasi saat ini dan melanjutkan ke iterasi berikutnya.</p>
-      <pre><code># Lewati iterasi jika i adalah 3\ni = 0\nwhile i < 6:\n  i += 1\n  if i == 3:\n    continue\n  print(i) # Output: 1, 2, 4, 5, 6</code></pre>
+      <p>Dengan pernyataan <code>continue</code>, kita dapat menghentikan iterasi saat ini and melanjutkan ke iterasi berikutnya.</p>
+      <pre># Lewati iterasi jika i adalah 3
+i = 0
+while i < 6:
+  i += 1
+  if i == 3:
+    continue
+  print(i) # Output: 1, 2, 4, 5, 6</pre>
     `
   },
   {
     id: 'for-loop',
     title: 'For Loop',
     imageUrl: forLoopImage, 
-    defaultCode: '# Selamat datang di modul For Loop!\n# Coba buat perulangan dengan for.\n\nbuah = ["apel", "pisang", "ceri"]\nfor x in buah:\n  print(x)\n',
+    defaultCode: `# Selamat datang di modul For Loop!
+# Coba buat perulangan with for.
+
+buah = ["apel", "pisang", "ceri"]
+for x in buah:
+  print(x)
+`,
     quiz: {
       title: 'For Loop Quiz',
       questions: [
         {
-          question: "Fungsi apa yang umum digunakan dengan for loop untuk melakukan perulangan sebanyak N kali?",
+          question: "Fungsi apa yang umum digunakan with for loop untuk melakukan perulangan sebanyak N kali?",
           options: ["loop()", "repeat()", "range()", "count()"],
         },
         {
-          question: "Bisakah `for loop` digunakan untuk melakukan iterasi pada sebuah string?",
+          question: "Bisakah \`for loop\` digunakan untuk melakukan iterasi pada sebuah string?",
           options: ["Ya", "Tidak"],
         }
       ]
@@ -341,22 +453,35 @@ export const modules = [
       
       <h3>Iterasi pada String</h3>
       <p>Bahkan string adalah objek yang dapat diiterasi, mereka berisi urutan karakter:</p>
-      <pre><code># Ulangi huruf-huruf dalam kata "banana"\nfor x in "banana":\n  print(x)</code></pre>
+      <pre># Ulangi huruf-huruf dalam kata "banana"\nfor x in "banana":\n  print(x)</pre>
 
       <h3>Kata Kunci <code>break</code></h3>
       <p>Sama seperti di *while loop*, <code>break</code> dapat menghentikan *loop* sebelum selesai.</p>
-      <pre><code>fruits = ["apple", "banana", "cherry"]\nfor x in fruits:\n  print(x)\n  if x == "banana":\n    break</code></pre>
+      <pre>fruits = ["apple", "banana", "cherry"]
+for x in fruits:
+  print(x)
+  if x == "banana":
+    break</pre>
 
       <h3>Fungsi <code>range()</code></h3>
-      <p>Untuk mengulang blok kode sebanyak jumlah tertentu, kita bisa menggunakan fungsi <code>range()</code>. Fungsi <code>range()</code> mengembalikan urutan angka, dimulai dari 0 secara default, dan bertambah 1, dan berakhir pada angka yang ditentukan.</p>
-      <pre><code># Cetak angka dari 0 hingga 5\nfor x in range(6):\n  print(x)</code></pre>
+      <p>Untuk mengulang blok kode sebanyak jumlah tertentu, kita bisa menggunakan fungsi <code>range()</code>. Fungsi <code>range()</code> mengembalikan urutan angka, dimulai dari 0 secara default, and bertambah 1, and berakhir pada angka yang ditentukan.</p>
+      <pre># Cetak angka dari 0 hingga 5
+for x in range(6):
+  print(x)</pre>
     `
   },
   {
     id: 'functions',
     title: 'Functions',
     imageUrl: functionsImage,
-    defaultCode: '# Selamat datang di modul Fungsi!\n# Coba buat dan panggil fungsi pertamamu.\n\ndef sapa(nama):\n  print("Halo, " + nama + "!")\n\nsapa("Dunia")\n',
+    defaultCode: `# Selamat datang di modul Fungsi!
+# Coba buat and panggil fungsi pertamamu.
+
+def sapa(nama):
+  print("Halo, " + nama + "!")
+
+sapa("Dunia")
+`,
     quiz: {
       title: 'Functions Quiz',
       questions: [
@@ -374,20 +499,30 @@ export const modules = [
       <h3>Apa itu Fungsi?</h3>
       <p>Fungsi adalah blok kode yang hanya berjalan ketika dipanggil. Anda dapat meneruskan data, yang dikenal sebagai parameter, ke dalam suatu fungsi. Sebuah fungsi dapat mengembalikan data sebagai hasilnya.</p>
       
-      <h3>Membuat dan Memanggil Fungsi</h3>
+      <h3>Membuat and Memanggil Fungsi</h3>
       <p>Dalam Python, fungsi didefinisikan menggunakan kata kunci <code>def</code>:</p>
-      <pre><code># Mendefinisikan fungsi\ndef sapaan_saya():\n  print("Halo dari dalam fungsi!")\n
-# Memanggil fungsi\nsapaan_saya()</code></pre>
+      <pre># Mendefinisikan fungsi
+def sapaan_saya():
+  print("Halo dari dalam fungsi!")
+
+# Memanggil fungsi
+sapaan_saya()</pre>
 
       <h3>Argumen (Parameter)</h3>
       <p>Informasi dapat diteruskan ke fungsi sebagai argumen. Argumen ditentukan setelah nama fungsi, di dalam tanda kurung.</p>
-      <pre><code>def sapaan_nama(nama):\n  print("Halo, " + nama + "!")\n
-sapaan_nama("Michael")\nsapaan_nama("Budi")</code></pre>
+      <pre>def sapaan_nama(nama):
+  print("Halo, " + nama + "!")
+
+sapaan_nama("Michael")
+sapaan_nama("Budi")</pre>
 
       <h3>Kata Kunci <code>return</code></h3>
       <p>Untuk membiarkan fungsi mengembalikan nilai, gunakan pernyataan <code>return</code>:</p>
-      <pre><code>def kali_lima(x):\n  return 5 * x\n
-print(kali_lima(3))  # Output: 15\nprint(kali_lima(10)) # Output: 50</code></pre>
+      <pre>def kali_lima(x):
+  return 5 * x
+
+print(kali_lima(3))  # Output: 15
+print(kali_lima(10)) # Output: 50</pre>
     `
   },
 ];

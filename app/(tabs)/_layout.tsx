@@ -12,9 +12,14 @@ export default function TabLayout() {
           backgroundColor: '#fff',
           borderTopWidth: 1,
           borderTopColor: '#e5e7eb',
-          height: Platform.OS === 'ios' ? 88 : 60,
-          paddingBottom: Platform.OS === 'ios' ? 28 : 8,
+          height: Platform.OS === 'ios' ? 100 : 80,
+          paddingBottom: Platform.OS === 'ios' ? 30 : 15,
           paddingTop: 8,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+          marginTop: 2,
         },
         tabBarActiveTintColor: '#4f46e5',
         tabBarInactiveTintColor: '#9ca3af',
@@ -23,8 +28,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <Ionicons name="home" size={24} color={color} />,
+          title: 'Modules',
+          tabBarIcon: ({ color }) => <Ionicons name="library" size={24} color={color} />,
         }}
       />
       <Tabs.Screen
