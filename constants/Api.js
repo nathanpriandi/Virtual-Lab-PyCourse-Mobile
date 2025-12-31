@@ -1,5 +1,5 @@
-// Base URL for the backend API
-// TODO: Update this URL after deploying the backend to Render/Koyeb
-const API_BASE_URL = 'https://virtual-lab-pycourse-production.up.railway.app';
+const API_BASE_URL = __DEV__
+  ? 'http://192.168.1.21:8000'
+  : 'https://pycourse-backend.koyeb.app';
 
 export default API_BASE_URL;
