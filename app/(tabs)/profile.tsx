@@ -13,10 +13,10 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 
+import { getToken, removeToken } from '@/utils/storage';
 import { modules } from '../../constants/modules';
 import API_BASE_URL from '../../constants/Api';
 
@@ -26,12 +26,17 @@ export default function ProfileScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [isProgressExpanded, setIsProgressExpanded] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   
   const router = useRouter();
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const fetchUserData = async () => {
     try {
-      const token = await SecureStore.getItemAsync('token');
+      const token = await getToken('token');
       if (!token) {
         router.replace('/auth');
         return;
@@ -44,7 +49,7 @@ export default function ProfileScreen() {
       if (response.ok) {
         setUser(await response.json());
       } else {
-        await SecureStore.deleteItemAsync('token');
+        await removeToken('token');
         router.replace('/auth');
       }
     } catch (err) {
@@ -56,8 +61,10 @@ export default function ProfileScreen() {
   };
 
   useEffect(() => {
-    fetchUserData();
-  }, []);
+    if (isMounted) {
+      fetchUserData();
+    }
+  }, [isMounted]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -66,8 +73,8 @@ export default function ProfileScreen() {
   }, []);
 
   const handleLogout = async () => {
-    await SecureStore.deleteItemAsync('token');
-    await SecureStore.deleteItemAsync('user');
+    await removeToken('token');
+    await removeToken('user');
     router.replace('/auth');
   };
 
@@ -87,7 +94,7 @@ export default function ProfileScreen() {
   const uploadAvatar = async (uri: string) => {
     setUploading(true);
     try {
-      const token = await SecureStore.getItemAsync('token');
+      const token = await getToken('token');
       if (!token) return;
 
       const formData = new FormData();
@@ -143,6 +150,8 @@ export default function ProfileScreen() {
     }
     return `https://ui-avatars.com/api/?name=${user?.username || 'User'}&background=random`;
   };
+
+  if (!isMounted) return null;
 
   if (loading) {
     return (

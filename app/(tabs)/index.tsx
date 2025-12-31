@@ -14,9 +14,9 @@ import {
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 
+import { getToken } from '@/utils/storage';
 import { modules } from '../../constants/modules';
 import Typewriter from '../../components/Typewriter';
 import API_BASE_URL from '../../constants/Api';
@@ -28,7 +28,12 @@ export default function HomeScreen() {
   const [completedModules, setCompletedModules] = useState<string[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleScroll = (event: any) => {
     const offsetY = event.nativeEvent.contentOffset.y;
@@ -41,7 +46,7 @@ export default function HomeScreen() {
 
   const fetchUserData = async () => {
     try {
-      const token = await SecureStore.getItemAsync('token');
+      const token = await getToken('token');
       if (token) {
         const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
           headers: { 'x-auth-token': token },
@@ -65,8 +70,10 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
-    fetchUserData();
-  }, []);
+    if (isMounted) {
+      fetchUserData();
+    }
+  }, [isMounted]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -171,6 +178,8 @@ export default function HomeScreen() {
       </>
     );
   };
+
+  if (!isMounted) return null;
 
   return (
     <SafeAreaView style={styles.safeArea}>

@@ -1,9 +1,18 @@
 import { Link, Stack } from 'expo-router';
 import { StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
 
 import { Text, View } from '@/components/Themed';
 
 export default function NotFoundScreen() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
+
   return (
     <>
       <Stack.Screen options={{ title: 'Oops!' }} />
