@@ -27,7 +27,17 @@ const COLUMN_WIDTH = (width - 40) / 2 - 10; // 2 columns with padding
 export default function HomeScreen() {
   const [completedModules, setCompletedModules] = useState<string[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
   const router = useRouter();
+
+  const handleScroll = (event: any) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    if (offsetY > 20 && showScrollIndicator) {
+      setShowScrollIndicator(false);
+    } else if (offsetY <= 0 && !showScrollIndicator) {
+        setShowScrollIndicator(true);
+    }
+  };
 
   const fetchUserData = async () => {
     try {
@@ -75,14 +85,15 @@ export default function HomeScreen() {
         activeOpacity={0.9}
       >
         <View style={styles.cardHeader}>
-            <Image source={module.imageUrl} style={styles.cardImage} contentFit="cover" />
-            <LinearGradient
-                colors={isCompleted ? ['#22c55e', '#16a34a'] : ['#0C0F97', '#4f46e5']}
-                style={styles.moduleNumberContainer}
-            >
-                <Text style={styles.moduleNumber}>{index + 1}</Text>
-            </LinearGradient>
+            <Image source={module.imageUrl} style={styles.cardImage} contentFit="cover" transition={1000} />
         </View>
+        
+        <LinearGradient
+            colors={isCompleted ? ['#22c55e', '#16a34a'] : ['#0C0F97', '#4f46e5']}
+            style={styles.moduleNumberContainer}
+        >
+            <Text style={styles.moduleNumber}>{index + 1}</Text>
+        </LinearGradient>
         
         <View style={styles.cardContent}>
           <Text style={styles.cardTitle} numberOfLines={2}>{module.title}</Text>
@@ -97,35 +108,69 @@ export default function HomeScreen() {
     );
   };
 
-  const renderHeader = () => (
-    <>
-        <LinearGradient
-            colors={['#f0f4ff', '#e0e7ff']}
-            style={styles.headerContainer}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-        >
-            <Text style={styles.headerTitle}>Selamat Datang di PyCourse!</Text>
-            <View style={styles.codeBlock}>
-                <Typewriter
-                    texts={[
-                        "user = 'PyCourse'",
-                        "print('Hello PyCourse')",
-                        'for i in range(5): ',
-                        'def greet(user): ',
-                    ]}
-                    style={styles.codeText}
-                />
-            </View>
-        </LinearGradient>
+  const renderHeader = () => {
+    let nextModuleIndex = 0;
+    if (completedModules.length > 0) {
+      // Find the highest index among completed modules
+      const maxCompletedIndex = modules.reduce((max, module, index) => {
+        return completedModules.includes(module.id) ? Math.max(max, index) : max;
+      }, -1);
+      nextModuleIndex = maxCompletedIndex + 1;
+    }
+    
+    const nextModule = nextModuleIndex < modules.length ? modules[nextModuleIndex] : null;
 
-        <Text style={styles.sectionDescription}>
-            Silakan pilih modul di bawah ini untuk memulai perjalanan belajar Python Anda.
-        </Text>
-        
-        <Text style={styles.sectionTitle}>Daftar Modul</Text>
-    </>
-  );
+    return (
+      <>
+          <LinearGradient
+              colors={['#667eea', '#764ba2']}
+              style={styles.headerContainer}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+          >
+              <Image 
+                source={require('../../assets/pycourse-logo.png')} 
+                style={styles.logo} 
+                contentFit="contain" 
+              />
+              <Text style={styles.headerTitle}>Selamat Datang di PyCourse!</Text>
+              <View style={styles.codeBlock}>
+                  <Typewriter
+                      texts={[
+                          "user = 'PyCourse'",
+                          "print('Hello PyCourse')",
+                          'for i in range(5): ',
+                          'def greet(user): ',
+                      ]}
+                      style={styles.codeText}
+                  />
+              </View>
+          </LinearGradient>
+
+          {nextModule && (
+            <View style={styles.continueSection}>
+                <Text style={styles.sectionTitle}>Lanjutkan Belajar</Text>
+                <TouchableOpacity 
+                    style={styles.continueCard}
+                    onPress={() => router.push(`/module/${nextModule.id}`)}
+                >
+                    <Image source={nextModule.imageUrl} style={styles.continueImage} contentFit="cover" transition={1000} />
+                    <View style={styles.continueContent}>
+                        <Text style={styles.continueLabel}>MODUL {nextModuleIndex + 1}</Text>
+                        <Text style={styles.continueTitle}>{nextModule.title}</Text>
+                        <View style={styles.progressBar}>
+                            <View style={[styles.progressFill, { width: `${(completedModules.length / modules.length) * 100}%` }]} />
+                        </View>
+                    </View>
+                    <Ionicons name="play-circle" size={40} color="#4f46e5" />
+                </TouchableOpacity>
+            </View>
+          )}
+
+          <Text style={styles.sectionTitle}>Daftar Modul</Text>
+      </>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -135,10 +180,18 @@ export default function HomeScreen() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.contentContainer}
           ListHeaderComponent={renderHeader}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
           refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#4f46e5" />
           }
         />
+        {showScrollIndicator && (
+            <View pointerEvents="none" style={styles.scrollIndicator}>
+                <Text style={styles.scrollIndicatorText}>Scroll for more</Text>
+                <Ionicons name="chevron-down" size={20} color="#6b7280" />
+            </View>
+        )}
     </SafeAreaView>
   );
 }
@@ -155,7 +208,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     padding: 24,
     borderRadius: 20,
-    marginBottom: 24,
+    marginBottom: 16,
     alignItems: 'center',
     shadowColor: '#4f46e5',
     shadowOffset: { width: 0, height: 4 },
@@ -163,10 +216,39 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 3,
   },
+  scrollIndicator: {
+    position: 'absolute',
+    bottom: 20,
+    alignSelf: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+    flexDirection: 'row',
+    gap: 6,
+  },
+  scrollIndicatorText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#6b7280',
+  },
+  logo: {
+    width: 150,
+    height: 50,
+    marginBottom: 10,
+  },
   headerTitle: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#1e1b4b',
+    color: '#ffffff',
     textAlign: 'center',
     marginBottom: 16,
   },
@@ -183,19 +265,63 @@ const styles = StyleSheet.create({
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
     fontSize: 14,
   },
-  sectionDescription: {
-    fontSize: 15,
-    color: '#4b5563',
-    marginBottom: 16,
-    lineHeight: 22,
-    paddingHorizontal: 4,
-  },
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
     color: '#1e1b4b',
     marginBottom: 16,
     paddingHorizontal: 4,
+  },
+  continueSection: {
+    marginBottom: 24,
+  },
+  continueCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  continueImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 12,
+  },
+  continueContent: {
+    flex: 1,
+    marginLeft: 12,
+    marginRight: 8,
+  },
+  continueLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#6b7280',
+    letterSpacing: 0.5,
+  },
+  continueTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#1e1b4b',
+    marginVertical: 2,
+  },
+  progressBar: {
+    height: 4,
+    backgroundColor: '#f3f4f6',
+    borderRadius: 2,
+    marginTop: 4,
+    width: '100%',
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: '#4f46e5',
+    borderRadius: 2,
   },
   card: {
     width: '100%',
@@ -217,9 +343,11 @@ const styles = StyleSheet.create({
   },
   cardHeader: {
     position: 'relative',
-    height: 100,
+    height: 140,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: '#f3f4f6',
   },
   cardImage: {
     width: '100%',
