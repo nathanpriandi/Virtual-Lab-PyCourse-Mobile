@@ -13,9 +13,9 @@ import {
 } from 'react-native';
 import { useLocalSearchParams, useRouter, Stack, useNavigation } from 'expo-router';
 import RenderHtml from 'react-native-render-html';
-import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 
+import { getToken } from '@/utils/storage';
 import { modules } from '../../constants/modules';
 import API_BASE_URL from '../../constants/Api';
 import Quiz from '../../components/Quiz';
@@ -28,8 +28,13 @@ export default function ModuleScreen() {
   const [view, setView] = useState('materi'); // materi | code | quiz | result
   const [initialCode, setInitialCode] = useState<string | null>(null);
   const [quizResult, setQuizResult] = useState<any>(null);
+  const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
   const navigation = useNavigation();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
@@ -46,10 +51,10 @@ export default function ModuleScreen() {
   const moduleData = modules.find((m) => m.id === id);
 
   useEffect(() => {
-    if (!moduleData) return;
+    if (!moduleData || !isMounted) return;
 
     const setupModule = async () => {
-      const token = await SecureStore.getItemAsync('token');
+      const token = await getToken('token');
       if (!token) {
         setInitialCode(moduleData.defaultCode || "# Silakan login untuk menyimpan kodemu\nprint('Hello, World!')");
         return;
@@ -78,11 +83,11 @@ export default function ModuleScreen() {
     };
 
     setupModule();
-  }, [id, moduleData]);
+  }, [id, moduleData, isMounted]);
 
   const handleSaveCode = async (code: string) => {
     try {
-        const token = await SecureStore.getItemAsync('token');
+        const token = await getToken('token');
         if (token) {
             await fetch(`${API_BASE_URL}/api/progress/save-code`, {
                 method: 'POST',
@@ -100,7 +105,7 @@ export default function ModuleScreen() {
 
   const handleQuizComplete = async (answers: any[]) => {
     try {
-      const token = await SecureStore.getItemAsync('token');
+      const token = await getToken('token');
       if (!token) return;
 
       const response = await fetch(`${API_BASE_URL}/api/progress/submit-quiz`, {
@@ -124,6 +129,8 @@ export default function ModuleScreen() {
       Alert.alert('Error', 'Network error');
     }
   };
+
+  if (!isMounted) return null;
 
   if (!moduleData) {
     return (

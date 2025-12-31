@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as SecureStore from 'expo-secure-store';
+import { saveToken } from '@/utils/storage';
 import API_BASE_URL from '../constants/Api';
 
 export default function AuthScreen() {
@@ -25,8 +25,13 @@ export default function AuthScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isMounted, setIsMounted] = useState(false);
   
   const router = useRouter();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleSubmit = async () => {
     setError('');
@@ -59,10 +64,10 @@ export default function AuthScreen() {
       if (response.ok) {
         if (isLogin) {
           if (data && data.token) {
-            await SecureStore.setItemAsync('token', data.token);
+            await saveToken('token', data.token);
             // Also store user info if needed, or fetch it later
             if (data.user) {
-                await SecureStore.setItemAsync('user', JSON.stringify(data.user));
+                await saveToken('user', JSON.stringify(data.user));
             }
             router.replace('/(tabs)');
           } else {
@@ -95,6 +100,8 @@ export default function AuthScreen() {
     setEmail('');
     setPassword('');
   };
+
+  if (!isMounted) return null;
 
   return (
     <LinearGradient
