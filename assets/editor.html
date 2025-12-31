@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PyCourse Editor</title>
+    <!-- CodeMirror -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    
+    <!-- Pyodide -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
+
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; background-color: #1e1e1e; color: #fff; font-family: monospace; }
+        #editor-container { height: 60%; font-size: 14px; }
+        .CodeMirror { height: 100%; }
+        #output-container { height: 40%; padding: 10px; box-sizing: border-box; background-color: #1e1e1e; border-top: 1px solid #333; overflow-y: auto; }
+        #output { white-space: pre-wrap; color: #ddd; }
+        #controls { position: absolute; top: 10px; right: 10px; z-index: 10; }
+        .btn { background: #4f46e5; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        .btn:disabled { opacity: 0.5; }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <button id="run-btn" class="btn" onclick="runPython()">Run</button>
+    </div>
+    <div id="editor-container"></div>
+    <div id="output-container">
+        <div>Output:</div>
+        <div id="output">Loading Python...</div>
+    </div>
+
+    <script>
+        let editor;
+        let pyodide;
+        let isReady = false;
+
+        // Initialize CodeMirror
+        editor = CodeMirror(document.getElementById("editor-container"), {
+            mode: "python",
+            theme: "monokai",
+            lineNumbers: true,
+            indentUnit: 4,
+            viewportMargin: Infinity
+        });
+
+        // Debounce logic for saving
+        let timeoutId;
+        editor.on('change', () => {
+            if (timeoutId) clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                const code = editor.getValue();
+                if (window.ReactNativeWebView) {
+                    window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'save', code: code }));
+                }
+            }, 1500);
+        });
+
+        // Initialize Pyodide
+        async function main() {
+            try {
+                pyodide = await loadPyodide();
+                
+                // Redirect stdout
+                pyodide.setStdout({
+                    batched: (text) => {
+                        document.getElementById("output").textContent += text + "\n";
+                    }
+                });
+                
+                document.getElementById("output").textContent = "Python Ready.\n";
+                isReady = true;
+                
+                // Signal to RN that we are ready
+                if (window.ReactNativeWebView) {
+                    window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'ready' }));
+                }
+            } catch (err) {
+                document.getElementById("output").textContent = "Error loading Python: " + err.message;
+            }
+        }
+
+        main();
+
+        async function runPython() {
+            if (!isReady) return;
+            const code = editor.getValue();
+            document.getElementById("output").textContent = ""; // Clear output
+            
+            try {
+                await pyodide.runPythonAsync(code);
+            } catch (err) {
+                document.getElementById("output").textContent += "Error: " + err.message + "\n";
+            }
+        }
+
+        // Handle messages from React Native
+        document.addEventListener("message", function(event) {
+            handleMessage(event.data);
+        });
+        
+        window.addEventListener("message", function(event) {
+            handleMessage(event.data);
+        });
+
+        function handleMessage(data) {
+            try {
+                const msg = JSON.parse(data);
+                if (msg.type === 'setCode') {
+                    editor.setValue(msg.code);
+                }
+            } catch (e) {
+                console.error("Error parsing message", e);
+            }
+        }
+    </script>
+</body>
+</html>
