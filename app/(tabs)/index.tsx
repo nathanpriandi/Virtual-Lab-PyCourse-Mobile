@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   ScrollView,
+  FlatList,
   TouchableOpacity,
   RefreshControl,
   Dimensions,
@@ -63,7 +64,7 @@ export default function HomeScreen() {
     setRefreshing(false);
   }, []);
 
-  const renderModuleCard = (module: any, index: number) => {
+  const renderModuleCard = ({ item: module, index }: { item: any, index: number }) => {
     const isCompleted = completedModules.includes(module.id);
     
     return (
@@ -96,15 +97,8 @@ export default function HomeScreen() {
     );
   };
 
-  return (
-    <SafeAreaView style={styles.safeArea}>
-        <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}
-        refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#4f46e5" />
-        }
-        >
+  const renderHeader = () => (
+    <>
         <LinearGradient
             colors={['#f0f4ff', '#e0e7ff']}
             style={styles.headerContainer}
@@ -130,11 +124,21 @@ export default function HomeScreen() {
         </Text>
         
         <Text style={styles.sectionTitle}>Daftar Modul</Text>
+    </>
+  );
 
-        <View style={styles.grid}>
-            {modules.map((module, index) => renderModuleCard(module, index))}
-        </View>
-        </ScrollView>
+  return (
+    <SafeAreaView style={styles.safeArea}>
+        <FlatList
+          data={modules}
+          renderItem={renderModuleCard}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.contentContainer}
+          ListHeaderComponent={renderHeader}
+          refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#4f46e5" />
+          }
+        />
     </SafeAreaView>
   );
 }
@@ -143,9 +147,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  container: {
-    flex: 1,
   },
   contentContainer: {
     padding: 16,
@@ -196,13 +197,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingHorizontal: 4,
   },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
   card: {
-    width: COLUMN_WIDTH,
+    width: '100%',
     backgroundColor: 'white',
     borderRadius: 16,
     marginBottom: 20,

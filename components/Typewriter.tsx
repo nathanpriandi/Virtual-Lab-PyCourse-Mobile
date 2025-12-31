@@ -22,7 +22,7 @@ export default function Typewriter({
 
   useEffect(() => {
     const currentText = texts[textIndex];
-    let timeoutId;
+    let timeoutId: any;
 
     if (isDeleting) {
       if (displayedText.length > 0) {

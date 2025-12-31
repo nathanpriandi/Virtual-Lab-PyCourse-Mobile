@@ -156,20 +156,37 @@ export default function ModuleScreen() {
     switch (view) {
       case 'code':
         return (
-            <View style={{flex: 1}}>
-                {editorUri && (
-                    <WebView
-                        ref={webViewRef}
-                        source={{ uri: editorUri }}
-                        style={{ flex: 1, backgroundColor: '#1e1e1e' }}
-                        onMessage={handleMessage}
-                        javaScriptEnabled={true}
-                        originWhitelist={['*']}
-                        allowFileAccess={true}
-                    />
-                )}
-                {!editorUri && <ActivityIndicator size="large" color="#4f46e5" style={{marginTop: 50}} />}
-            </View>
+            <ScrollView contentContainerStyle={styles.codeContainer}>
+                <Text style={styles.codeHeader}>Virtual Lab Editor</Text>
+                <Text style={styles.codeInstruction}>
+                    Tulis kodemu di bawah ini. Editor ini mendukung syntax highlighting Python.
+                </Text>
+
+                <View style={styles.editorWrapper}>
+                    {editorUri ? (
+                        <WebView
+                            ref={webViewRef}
+                            source={{ uri: editorUri }}
+                            style={{ flex: 1, backgroundColor: '#1e1e1e' }}
+                            onMessage={handleMessage}
+                            javaScriptEnabled={true}
+                            originWhitelist={['*']}
+                            allowFileAccess={true}
+                            scrollEnabled={true}
+                            nestedScrollEnabled={true}
+                        />
+                    ) : (
+                        <ActivityIndicator size="large" color="#4f46e5" style={{marginTop: 50}} />
+                    )}
+                </View>
+
+                <View style={styles.consoleHint}>
+                    <Ionicons name="terminal-outline" size={20} color="#6b7280" />
+                    <Text style={styles.consoleHintText}>
+                        Klik tombol "Run" di dalam editor untuk melihat hasil.
+                    </Text>
+                </View>
+            </ScrollView>
         );
       case 'quiz':
         return moduleData.quiz ? (
@@ -396,5 +413,44 @@ const styles = StyleSheet.create({
     backgroundColor: '#dcfce7',
     padding: 10,
     borderRadius: 8,
-  }
+  },
+  codeContainer: {
+    padding: 20,
+    paddingBottom: 40,
+  },
+  codeHeader: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1e1b4b',
+    marginBottom: 8,
+  },
+  codeInstruction: {
+    fontSize: 14,
+    color: '#4b5563',
+    marginBottom: 16,
+    lineHeight: 20,
+  },
+  editorWrapper: {
+    height: 400,
+    width: '100%',
+    borderRadius: 12,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    backgroundColor: '#1e1e1e',
+    marginBottom: 16,
+  },
+  consoleHint: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    padding: 12,
+    backgroundColor: '#f3f4f6',
+    borderRadius: 8,
+  },
+  consoleHintText: {
+    fontSize: 13,
+    color: '#6b7280',
+    flex: 1,
+  },
 });

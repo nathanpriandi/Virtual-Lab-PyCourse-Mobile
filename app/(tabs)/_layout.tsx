@@ -28,6 +28,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="two"
+        options={{
+          title: 'Modules',
+          tabBarIcon: ({ color }) => <Ionicons name="library" size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
