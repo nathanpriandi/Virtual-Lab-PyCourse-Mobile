@@ -28,6 +28,8 @@ export default function ModuleScreen() {
   const [view, setView] = useState('materi'); // materi | code | quiz | result
   const [initialCode, setInitialCode] = useState<string | null>(null);
   const [quizResult, setQuizResult] = useState<any>(null);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [bestScore, setBestScore] = useState<number | null>(null);
   const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
   const navigation = useNavigation();
@@ -69,10 +71,13 @@ export default function ModuleScreen() {
           const userData = await userRes.json();
           const progress = userData.progress.find((p: any) => p.moduleId === id);
           
-          const savedCode = progress?.userCode;
-          const defaultCode = moduleData.defaultCode || "# Tulis kodemu di sini\nprint('Hello, World!')";
-          
-          setInitialCode(savedCode ?? defaultCode);
+          if (progress) {
+            setInitialCode(progress.userCode ?? moduleData.defaultCode);
+            setIsCompleted(progress.completed);
+            setBestScore(progress.quizScore);
+          } else {
+             setInitialCode(moduleData.defaultCode || "# Tulis kodemu di sini\nprint('Hello, World!')");
+          }
         } else {
             setInitialCode(moduleData.defaultCode);
         }
@@ -120,6 +125,8 @@ export default function ModuleScreen() {
       if (response.ok) {
         const result = await response.json();
         setQuizResult(result);
+        if (result.score === 100) setIsCompleted(true);
+        if (result.score > (bestScore || 0)) setBestScore(result.score);
         setView('result'); 
       } else {
         Alert.alert('Error', 'Failed to submit quiz');
@@ -212,7 +219,15 @@ export default function ModuleScreen() {
       default:
         return (
           <ScrollView contentContainerStyle={styles.contentContainer}>
-            <Text style={styles.moduleTitle}>{moduleData.title}</Text>
+            <View style={styles.headerRow}>
+                <Text style={styles.moduleTitle}>{moduleData.title}</Text>
+                {isCompleted && (
+                    <View style={styles.completedBadgeHeader}>
+                        <Ionicons name="checkmark-circle" size={16} color="#166534" />
+                        <Text style={styles.completedTextHeader}>Selesai</Text>
+                    </View>
+                )}
+            </View>
             <RenderHtml
               contentWidth={width - 40}
               source={{ html: moduleData.materi }}
@@ -227,10 +242,16 @@ export default function ModuleScreen() {
             
             {moduleData.quiz && (
                 <View style={styles.quizPrompt}>
-                    <Text style={styles.quizPromptTitle}>Uji Pemahaman Anda</Text>
-                    <Text style={styles.quizPromptText}>Selesaikan kuis singkat untuk menguji apa yang telah Anda pelajari.</Text>
+                    <Text style={styles.quizPromptTitle}>
+                        {isCompleted ? 'Modul Selesai' : 'Uji Pemahaman Anda'}
+                    </Text>
+                    <Text style={styles.quizPromptText}>
+                        {isCompleted 
+                            ? `Anda telah menyelesaikan modul ini dengan skor ${bestScore}%.` 
+                            : 'Selesaikan kuis singkat untuk menguji apa yang telah Anda pelajari.'}
+                    </Text>
                     <TouchableOpacity style={styles.primaryButton} onPress={() => setView('quiz')}> 
-                        <Text style={styles.primaryButtonText}>{quizResult ? 'Ulangi Kuis' : 'Mulai Kuis'}</Text>
+                        <Text style={styles.primaryButtonText}>{isCompleted ? 'Ulangi Kuis' : 'Mulai Kuis'}</Text>
                     </TouchableOpacity>
                 </View>
             )}
@@ -314,11 +335,33 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 40,
   },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 20,
+    gap: 10,
+  },
   moduleTitle: {
     fontSize: 24,
     fontWeight: '800',
     color: '#1e1b4b',
-    marginBottom: 20,
+    flex: 1,
+  },
+  completedBadgeHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#dcfce7',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    gap: 4,
+    marginTop: 4,
+  },
+  completedTextHeader: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#166534',
   },
   primaryButton: {
     backgroundColor: '#4f46e5',
