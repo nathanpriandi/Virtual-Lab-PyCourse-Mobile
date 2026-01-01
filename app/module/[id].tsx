@@ -165,9 +165,9 @@ export default function ModuleScreen() {
                 </View>
 
                 <View style={styles.consoleHint}>
-                    <Ionicons name="terminal-outline" size={20} color="#6b7280" />
+                    <Ionicons name="play-circle-outline" size={24} color="#4f46e5" />
                     <Text style={styles.consoleHintText}>
-                        Klik tombol "Run" di dalam editor untuk melihat hasil.
+                        Tekan tombol "Run" di pojok kanan atas editor untuk menjalankan kodemu.
                     </Text>
                 </View>
             </ScrollView>
@@ -468,14 +468,18 @@ const styles = StyleSheet.create({
   consoleHint: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    padding: 12,
-    backgroundColor: '#f3f4f6',
-    borderRadius: 8,
+    gap: 12,
+    padding: 16,
+    backgroundColor: '#eef2ff',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#c7d2fe',
   },
   consoleHintText: {
-    fontSize: 13,
-    color: '#6b7280',
+    fontSize: 14,
+    color: '#4338ca',
+    fontWeight: '500',
     flex: 1,
+    lineHeight: 20,
   },
 });
