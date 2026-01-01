@@ -80,7 +80,7 @@ export default function ProfileScreen() {
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.5,
@@ -102,7 +102,8 @@ export default function ProfileScreen() {
       // Extract file name and type
       const filename = uri.split('/').pop();
       const match = /\.(\w+)$/.exec(filename || '');
-      const type = match ? `image/${match[1]}` : `image`;
+      let type = match ? `image/${match[1]}` : `image`;
+      if (type === 'image/jpg') type = 'image/jpeg';
 
       // @ts-ignore
       formData.append('avatar', { uri, name: filename, type });
@@ -111,7 +112,6 @@ export default function ProfileScreen() {
         method: 'POST',
         headers: {
           'x-auth-token': token,
-          'Content-Type': 'multipart/form-data',
         },
         body: formData,
       });

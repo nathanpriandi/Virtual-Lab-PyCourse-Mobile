@@ -38,6 +38,13 @@ export default function AuthScreen() {
     setSuccess('');
     setLoading(true);
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address.');
+      setLoading(false);
+      return;
+    }
+
     const path = isLogin ? '/api/auth/login' : '/api/auth/register';
     const url = `${API_BASE_URL}${path}`;
     const body = isLogin ? { email, password } : { username, email, password };

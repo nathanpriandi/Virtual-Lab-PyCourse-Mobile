@@ -35,6 +35,11 @@ const router = express.Router();
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ msg: 'Please include a valid email' });
+  }
+
   try {
     let existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {

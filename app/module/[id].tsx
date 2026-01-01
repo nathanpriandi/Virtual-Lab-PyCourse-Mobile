@@ -120,7 +120,7 @@ export default function ModuleScreen() {
       if (response.ok) {
         const result = await response.json();
         setQuizResult(result);
-        // setView('result'); // Integrated into 'materi'
+        setView('result'); 
       } else {
         Alert.alert('Error', 'Failed to submit quiz');
       }
