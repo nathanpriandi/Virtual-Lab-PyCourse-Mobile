@@ -96,20 +96,22 @@ export default function HomeScreen() {
         </View>
         
         <LinearGradient
-            colors={isCompleted ? ['#22c55e', '#16a34a'] : ['#0C0F97', '#4f46e5']}
+            colors={['#0C0F97', '#4f46e5']}
             style={styles.moduleNumberContainer}
         >
             <Text style={styles.moduleNumber}>{index + 1}</Text>
         </LinearGradient>
         
         <View style={styles.cardContent}>
-          <Text style={styles.cardTitle} numberOfLines={2}>{module.title}</Text>
-          {isCompleted && (
-            <View style={styles.completedBadge}>
-              <Text style={styles.completedText}>Completed</Text>
-              <Ionicons name="checkmark-circle" size={14} color="#166534" style={{marginLeft: 4}} />
-            </View>
-          )}
+          <View style={styles.titleRow}>
+            <Text style={styles.cardTitle} numberOfLines={2}>{module.title}</Text>
+            {isCompleted && (
+              <View style={styles.completedBadge}>
+                <Text style={styles.completedText}>Completed</Text>
+                <Ionicons name="checkmark-circle" size={14} color="#166534" style={{marginLeft: 4}} />
+              </View>
+            )}
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -347,8 +349,9 @@ const styles = StyleSheet.create({
     borderColor: '#e2e8f0',
   },
   cardCompleted: {
-    borderColor: '#bbf7d0',
-    backgroundColor: '#f0fdf4',
+    borderColor: '#22c55e',
+    backgroundColor: '#dcfce7',
+    borderWidth: 2,
   },
   cardHeader: {
     position: 'relative',
@@ -387,21 +390,25 @@ const styles = StyleSheet.create({
   cardContent: {
     padding: 12,
   },
+  titleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: 8,
+  },
   cardTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1e1b4b',
-    marginBottom: 4,
+    flex: 1,
   },
   completedBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#dcfce7',
-    alignSelf: 'flex-start',
     paddingVertical: 2,
     paddingHorizontal: 8,
     borderRadius: 10,
-    marginTop: 4,
   },
   completedText: {
     color: '#166534',
