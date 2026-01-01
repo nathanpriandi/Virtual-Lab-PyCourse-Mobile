@@ -35,16 +35,17 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  useEffect(() => {
-    if (loaded) {
       const checkAuth = async () => {
-        const token = await getToken('token');
-        if (!token) {
-          router.replace('/auth');
+        try {
+          const token = await getToken('token');
+          if (!token) {
+            router.replace('/auth');
+          }
+        } catch (e) {
+          console.error(e);
+        } finally {
+          // Hide splash screen after auth check and potential redirect
+          await SplashScreen.hideAsync();
         }
       };
       checkAuth();
