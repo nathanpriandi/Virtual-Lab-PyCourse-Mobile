@@ -161,7 +161,7 @@ router.post('/me/avatar/upload', auth, upload.single('avatar'), async (req, res)
   }
 
   try {
-    const avatarPath = path.join('avatars', req.file.filename).replace(/\\/g, '/');
+    const avatarPath = path.join('/uploads/avatars', req.file.filename).replace(/\\/g, '/');
 
     const updatedUser = await User.findByIdAndUpdate(
       req.user.id,

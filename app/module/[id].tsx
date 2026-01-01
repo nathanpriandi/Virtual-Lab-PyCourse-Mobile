@@ -19,7 +19,7 @@ import { getToken } from '@/utils/storage';
 import { modules } from '../../constants/modules';
 import API_BASE_URL from '../../constants/Api';
 import Quiz from '../../components/Quiz';
-import CodeEditorNative from '../../components/CodeEditorNative';
+import CodeEditor from '../../components/CodeEditor';
 
 const { width } = Dimensions.get('window');
 
@@ -151,7 +151,7 @@ export default function ModuleScreen() {
                 </Text>
 
                 <View style={styles.editorWrapper}>
-                    <CodeEditorNative 
+                    <CodeEditor 
                         initialCode={initialCode} 
                         onSave={handleSaveCode} 
                     />

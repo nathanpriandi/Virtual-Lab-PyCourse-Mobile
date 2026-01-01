@@ -93,6 +93,7 @@ router.post('/submit-quiz', auth, async (req, res) => {
       });
     }
 
+    user.markModified('progress');
     await user.save();
 
     res.json({

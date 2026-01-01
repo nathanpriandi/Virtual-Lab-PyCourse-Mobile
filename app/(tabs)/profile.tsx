@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
   Platform
 } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
@@ -33,6 +33,12 @@ export default function ProfileScreen() {
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserData();
+    }, [])
+  );
 
   const fetchUserData = async () => {
     try {
@@ -99,14 +105,19 @@ export default function ProfileScreen() {
 
       const formData = new FormData();
       
-      // Extract file name and type
       const filename = uri.split('/').pop();
       const match = /\.(\w+)$/.exec(filename || '');
       let type = match ? `image/${match[1]}` : `image`;
       if (type === 'image/jpg') type = 'image/jpeg';
 
-      // @ts-ignore
-      formData.append('avatar', { uri, name: filename, type });
+      if (Platform.OS === 'web') {
+        const response = await fetch(uri);
+        const blob = await response.blob();
+        formData.append('avatar', blob, filename);
+      } else {
+        // @ts-ignore
+        formData.append('avatar', { uri, name: filename, type });
+      }
 
       const response = await fetch(`${API_BASE_URL}/api/auth/me/avatar/upload`, {
         method: 'POST',
@@ -144,9 +155,13 @@ export default function ProfileScreen() {
 
   const getAvatarUri = () => {
     if (user?.avatar) {
-        // Handle relative path from backend if needed, assuming backend returns full URL or relative
         if (user.avatar.startsWith('http')) return user.avatar;
-        return `${API_BASE_URL}${user.avatar}`;
+        // If it starts with '/', assume it's a relative path from API_BASE_URL
+        if (user.avatar.startsWith('/')) {
+            return `${API_BASE_URL}${user.avatar}`;
+        }
+        // Fallback for older paths or if logic changes
+        return `${API_BASE_URL}/${user.avatar}`;
     }
     return `https://ui-avatars.com/api/?name=${user?.username || 'User'}&background=random`;
   };
