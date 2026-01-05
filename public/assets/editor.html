@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PyCourse Editor</title>
-    <!-- CodeMirror -->
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
     
-    <!-- Pyodide -->
+    
     <script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
 
     <style>
@@ -39,7 +39,7 @@
         let pyodide;
         let isReady = false;
 
-        // Initialize CodeMirror
+        
         editor = CodeMirror(document.getElementById("editor-container"), {
             mode: "python",
             theme: "monokai",
@@ -48,7 +48,7 @@
             viewportMargin: Infinity
         });
 
-        // Debounce logic for saving
+        
         let timeoutId;
         editor.on('change', () => {
             if (timeoutId) clearTimeout(timeoutId);
@@ -59,18 +59,18 @@
                 if (window.ReactNativeWebView) {
                     window.ReactNativeWebView.postMessage(message);
                 } else {
-                    // Web iframe support
+                    
                     window.parent.postMessage(message, '*');
                 }
             }, 1500);
         });
 
-        // Initialize Pyodide
+        
         async function main() {
             try {
                 pyodide = await loadPyodide();
                 
-                // Redirect stdout
+                
                 pyodide.setStdout({
                     batched: (text) => {
                         document.getElementById("output").textContent += text + "\n";
@@ -80,7 +80,7 @@
                 document.getElementById("output").textContent = "Python Ready.\n";
                 isReady = true;
                 
-                // Signal to RN that we are ready
+                
                 const readyMsg = JSON.stringify({ type: 'ready' });
                 if (window.ReactNativeWebView) {
                     window.ReactNativeWebView.postMessage(readyMsg);
@@ -97,7 +97,7 @@
         async function runPython() {
             if (!isReady) return;
             const code = editor.getValue();
-            document.getElementById("output").textContent = ""; // Clear output
+            document.getElementById("output").textContent = ""; 
             
             try {
                 await pyodide.runPythonAsync(code);
@@ -106,7 +106,7 @@
             }
         }
 
-        // Handle messages from React Native
+        
         document.addEventListener("message", function(event) {
             handleMessage(event.data);
         });

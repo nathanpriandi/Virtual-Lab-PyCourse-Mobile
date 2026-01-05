@@ -14,7 +14,6 @@ export default function CodeEditorWeb({ initialCode, onSave, onReady }: CodeEdit
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       try {
-        // Ensure the message is valid JSON before parsing
         if (typeof event.data !== 'string') return;
         
         const data = JSON.parse(event.data);
@@ -22,7 +21,6 @@ export default function CodeEditorWeb({ initialCode, onSave, onReady }: CodeEdit
           setIsEditorReady(true);
           if (onReady) onReady();
           
-          // Inject initial code once ready
           if (initialCode && iframeRef.current?.contentWindow) {
             iframeRef.current.contentWindow.postMessage(
               JSON.stringify({ type: 'setCode', code: initialCode }),
@@ -33,15 +31,13 @@ export default function CodeEditorWeb({ initialCode, onSave, onReady }: CodeEdit
           if (onSave) onSave(data.code);
         }
       } catch (e) {
-        // Ignore parsing errors for messages that aren't ours
       }
     };
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [onReady, onSave, initialCode]); // Added initialCode dependency to ensure it's available when ready
+  }, [onReady, onSave, initialCode]);
 
-  // Also watch for initialCode changes if the editor is already ready
   useEffect(() => {
     if (isEditorReady && initialCode && iframeRef.current?.contentWindow) {
       iframeRef.current.contentWindow.postMessage(

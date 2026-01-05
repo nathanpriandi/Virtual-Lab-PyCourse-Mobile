@@ -22,7 +22,7 @@ import Typewriter from '../../components/Typewriter';
 import API_BASE_URL from '../../constants/Api';
 
 const { width } = Dimensions.get('window');
-const COLUMN_WIDTH = (width - 40) / 2 - 10; // 2 columns with padding
+const COLUMN_WIDTH = (width - 40) / 2 - 10; 
 
 export default function HomeScreen() {
   const [completedModules, setCompletedModules] = useState<string[]>([]);
@@ -58,7 +58,6 @@ export default function HomeScreen() {
             .map((p: any) => p.moduleId);
           setCompletedModules(completedIds);
         } else if (response.status === 401) {
-            // Token invalid
             router.replace('/auth');
         }
       } else {
@@ -120,7 +119,6 @@ export default function HomeScreen() {
   const renderHeader = () => {
     let nextModuleIndex = 0;
     if (completedModules.length > 0) {
-      // Find the highest index among completed modules
       const maxCompletedIndex = modules.reduce((max, module, index) => {
         return completedModules.includes(module.id) ? Math.max(max, index) : max;
       }, -1);
@@ -264,7 +262,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   codeBlock: {
-    backgroundColor: '#1e293b', // Dark background for code
+    backgroundColor: '#1e293b',
     padding: 12,
     borderRadius: 8,
     width: '100%',
@@ -272,7 +270,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   codeText: {
-    color: '#38bdf8', // Cyan like text
+    color: '#38bdf8',
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
     fontSize: 14,
   },
@@ -344,7 +342,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 4,
-    overflow: 'visible', // For the number badge to stick out
+    overflow: 'visible',
     borderWidth: 1,
     borderColor: '#e2e8f0',
   },

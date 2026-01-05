@@ -64,7 +64,6 @@ export default function AuthScreen() {
         data = await response.json();
       } else {
         const text = await response.text();
-        // Sometimes backend might send text error
         if (!response.ok) throw new Error(text || 'An error occurred');
       }
 
@@ -72,7 +71,6 @@ export default function AuthScreen() {
         if (isLogin) {
           if (data && data.token) {
             await saveToken('token', data.token);
-            // Also store user info if needed, or fetch it later
             if (data.user) {
                 await saveToken('user', JSON.stringify(data.user));
             }
@@ -239,7 +237,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   submitButton: {
-    backgroundColor: '#667eea', // Fallback
+    backgroundColor: '#667eea', 
     padding: 15,
     borderRadius: 12,
     alignItems: 'center',

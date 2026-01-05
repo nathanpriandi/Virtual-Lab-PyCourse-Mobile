@@ -15,10 +15,10 @@ if (!fs.existsSync(uploadsDir)) {
 
 app.use(cors({
   origin: [
-    'http://localhost:8081',      // Expo Web
-    'http://localhost:19006',     // Expo Go (Legacy)
-    'http://localhost:8000',      // Local Backend
-    /^https:\/\/.*\.vercel\.app$/ // All Vercel Subdomains (Regex)
+    'http://localhost:8081',      
+    'http://localhost:19006',     
+    'http://localhost:8000',      
+    /^https:\/\/.*\.vercel\.app$/ 
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true

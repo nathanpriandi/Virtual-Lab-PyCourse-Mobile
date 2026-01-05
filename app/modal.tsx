@@ -7,7 +7,7 @@ import { Text, View } from '@/components/Themed';
 
 export default function ModalScreen() {
   const [isMounted, setIsMounted] = useState(false);
-  // @ts-ignore: Ref type mismatch for Web vs Native
+  
   const containerRef = useRef<View>(null);
 
   useEffect(() => {
@@ -16,9 +16,8 @@ export default function ModalScreen() {
 
   useEffect(() => {
     if (isMounted && Platform.OS === 'web') {
-        // Short timeout to ensure the element is in the DOM
         setTimeout(() => {
-            // @ts-ignore: focus() exists on the DOM node in Web
+            
             containerRef.current?.focus();
         }, 100);
     }
@@ -30,17 +29,16 @@ export default function ModalScreen() {
     <View 
         style={styles.container} 
         ref={containerRef}
-        // @ts-ignore: React Native Web prop
+        
         dataSet={{ tabIndex: -1 }}
         aria-modal="true"
-        // @ts-ignore: 'dialog' is valid on Web
+        
         accessibilityRole="dialog"
     >
       <Text style={styles.title}>Modal</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <EditScreenInfo path="app/modal.tsx" />
 
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </View>
   );

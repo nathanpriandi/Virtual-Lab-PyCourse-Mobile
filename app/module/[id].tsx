@@ -25,7 +25,7 @@ const { width } = Dimensions.get('window');
 
 export default function ModuleScreen() {
   const { id } = useLocalSearchParams();
-  const [view, setView] = useState('materi'); // materi | code | quiz | result
+  const [view, setView] = useState('materi');
   const [initialCode, setInitialCode] = useState<string | null>(null);
   const [quizResult, setQuizResult] = useState<any>(null);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -49,7 +49,6 @@ export default function ModuleScreen() {
     return unsubscribe;
   }, [navigation, view]);
 
-  // Find module data
   const moduleData = modules.find((m) => m.id === id);
 
   useEffect(() => {
@@ -263,12 +262,11 @@ export default function ModuleScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <Stack.Screen 
-        options={{ 
+        options={{
             title: moduleData.title,
         }} 
       />
       
-      {/* Tab Navigation - Only show in Materi or Code view */}
       {(view === 'materi' || view === 'code') && (
         <View style={styles.tabContainer}>
             <TouchableOpacity 
