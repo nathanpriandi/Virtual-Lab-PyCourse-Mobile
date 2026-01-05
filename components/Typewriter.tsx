@@ -56,7 +56,7 @@ export default function Typewriter({
 
 const styles = StyleSheet.create({
   typewriterText: {
-    fontFamily: 'Courier', // Monospace font
+    fontFamily: 'Courier', 
     color: '#000',
     fontSize: 16,
   },

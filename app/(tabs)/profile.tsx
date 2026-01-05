@@ -60,7 +60,6 @@ export default function ProfileScreen() {
       }
     } catch (err) {
       console.error('Error fetching user data:', err);
-      // Alert.alert('Error', 'Failed to load profile');
     } finally {
       setLoading(false);
     }
@@ -115,7 +114,7 @@ export default function ProfileScreen() {
         const blob = await response.blob();
         formData.append('avatar', blob, filename);
       } else {
-        // @ts-ignore
+        
         formData.append('avatar', { uri, name: filename, type });
       }
 
@@ -156,11 +155,11 @@ export default function ProfileScreen() {
   const getAvatarUri = () => {
     if (user?.avatar) {
         if (user.avatar.startsWith('http')) return user.avatar;
-        // If it starts with '/', assume it's a relative path from API_BASE_URL
+        
         if (user.avatar.startsWith('/')) {
             return `${API_BASE_URL}${user.avatar}`;
         }
-        // Fallback for older paths or if logic changes
+        
         return `${API_BASE_URL}/${user.avatar}`;
     }
     return `https://ui-avatars.com/api/?name=${user?.username || 'User'}&background=random`;
